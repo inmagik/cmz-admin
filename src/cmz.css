@@ -1,0 +1,79 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: sans-serif;
+}
+
+.navbar-title {
+  color: deepskyblue !important;
+}
+
+.main-container {
+  padding-top: 54px;
+  position:absolute;
+  flex: 1;
+  display: flex;
+  left: 0;
+  right: 0;
+  height: 100%;
+  min-height: 100%;
+}
+
+.sidebar {
+  width: 200px;
+  padding-left: 0;
+}
+.main {
+  display: flex;
+  flex: 1;
+  padding: 10px 10px 0px 10px;
+  background-color: deepskyblue;
+}
+.menu-item {
+  text-decoration: none;
+  border-left: 0.4em solid white;
+  display: block;
+  padding: 0.5em 0.8em;
+  color: #666;
+  border-bottom: 1px solid #eee;
+}
+.menu-item:visited {
+  text-decoration: none !important;
+  color: #666;
+}
+.menu-item:active {
+  text-decoration: none !important;
+  color: #666;
+}
+.menu-item:focus {
+  text-decoration: none !important;
+  color: #666;
+}
+.menu-item:hover {
+  color: #666;
+  text-decoration: none;
+  color: deepskyblue;
+  border-left: 0.4em solid deepskyblue;
+}
+
+.content-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.content-card-body {
+  flex: 1;
+  overflow-y: scroll;
+}
+
+.page-link {
+  color: deepskyblue;
+}
+.page-item.active .page-link, .page-item.active .page-link:focus, .page-item.active .page-link:hover {
+  background-color: deepskyblue;
+  border-color: deepskyblue;
+}
+.page-link:focus, .page-link:hover {
+  color: deepskyblue;
+}
