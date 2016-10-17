@@ -1,12 +1,14 @@
 import React, { PropTypes } from 'react';
 import { get } from 'lodash';
 
-export const TextCell = ({ source, record = {} }) => (
-  <span>{get(record, source)}</span>
+export const TextCell = ({ resource, basePath, source, record = {}, ...passDownProps }) => (
+  <span {...passDownProps}>{get(record, source)}</span>
 );
 
 TextCell.propTypes = {
-  source: PropTypes.string.isRequired,
+  resource: PropTypes.string.isRequired,
+  basePath: PropTypes.string.isRequired,
+  source: PropTypes.string,
   record: PropTypes.object,
 };
 
