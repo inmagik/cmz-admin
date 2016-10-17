@@ -77,11 +77,11 @@ export class Paginator extends Component {
     const { page: currentPageNum } = this.props;
     return this.range().map(pageNum =>
       (pageNum === '.') ?
-        <PaginationItem>
+        <PaginationItem key={pageNum}>
           <PaginationLink tag='button'>&hellip;</PaginationLink>
         </PaginationItem>
         :
-        <PaginationItem active={pageNum === currentPageNum}>
+        <PaginationItem active={pageNum === currentPageNum} key={pageNum}>
           <PaginationLink tag='button' onClick={this.gotoPage} data-page={pageNum}>{pageNum}</PaginationLink>
         </PaginationItem>
     );
