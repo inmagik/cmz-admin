@@ -7,8 +7,8 @@ const Column = (props) => null;
 Column.propTypes = {
   source: PropTypes.string,
   label: PropTypes.string,
-  // header: PropTypes.element,
-  // cell: PropTypes.element,
+  header: PropTypes.any.isRequired,
+  cell: PropTypes.any.isRequired,
 };
 
 Column.defaultProps = {
