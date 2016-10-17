@@ -106,13 +106,13 @@ export class List extends Component {
           currentSort={query}
           updateSort={this.updateSort}
         />
-        {/* <Paginator
+        <Paginator
           resource={resource}
           page={parseInt(query.page, 10)}
           perPage={parseInt(query.perPage, 10)}
           total={total}
           setPage={this.setPage}
-        /> */}
+        />
       </PageContent>
     );
   }

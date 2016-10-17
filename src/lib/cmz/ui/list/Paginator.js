@@ -1,123 +1,124 @@
 import React, { Component, PropTypes } from 'react';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
-const buttonStyle = { margin: '10px 0' };
-
 export class Paginator extends Component {
-    range() {
-        const input = [];
-        const { page, perPage, total } = this.props;
-        const nbPages = Math.ceil(total / perPage) || 1;
+  constructor(props) {
+    super(props);
+    this.gotoPage = this.gotoPage.bind(this);
+    this.prevPage = this.prevPage.bind(this);
+    this.nextPage = this.nextPage.bind(this);
+  }
 
-        // display page links around the current page
-        if (page > 2) {
-            input.push('1');
-        }
-        if (page === 4) {
-            input.push('2');
-        }
-        if (page > 4) {
-            input.push('.');
-        }
-        if (page > 1) {
-            input.push(page - 1);
-        }
-        input.push(page);
-        if (page < nbPages) {
-            input.push(page + 1);
-        }
-        if (page === (nbPages - 3)) {
-            input.push(nbPages - 1);
-        }
-        if (page < (nbPages - 3)) {
-            input.push('.');
-        }
-        if (page < (nbPages - 1)) {
-            input.push(nbPages);
-        }
+  range() {
+    const input = [];
+    const { page, perPage, total } = this.props;
+    const nbPages = Math.ceil(total / perPage) || 1;
 
-        return input;
+    // display page links around the current page
+    if (page > 2) {
+      input.push('1');
+    }
+    if (page === 4) {
+      input.push('2');
+    }
+    if (page > 4) {
+      input.push('.');
+    }
+    if (page > 1) {
+      input.push(page - 1);
+    }
+    input.push(page);
+    if (page < nbPages) {
+      input.push(page + 1);
+    }
+    if (page === (nbPages - 3)) {
+      input.push(nbPages - 1);
+    }
+    if (page < (nbPages - 3)) {
+      input.push('.');
+    }
+    if (page < (nbPages - 1)) {
+      input.push(nbPages);
     }
 
-    getNbPages() {
-        return Math.ceil(this.props.total / this.props.perPage) || 1;
+    return input;
+  }
+
+  getNbPages() {
+    return Math.ceil(this.props.total / this.props.perPage) || 1;
+  }
+
+  prevPage(event) {
+    event.stopPropagation();
+    if (this.props.page === 1) {
+      throw new Error('Cannot go before page 1');
     }
+    this.props.setPage(this.props.page - 1);
+  }
 
-    prevPage(event) {
-        event.stopPropagation();
-        if (this.props.page === 1) {
-            throw new Error('Cannot go before page 1');
-        }
-        this.props.setPage(this.props.page - 1);
+  nextPage(event) {
+    event.stopPropagation();
+    if (this.props.page > this.getNbPages()) {
+      throw new Error('Cannot after last page');
     }
+    this.props.setPage(this.props.page + 1);
+  }
 
-    nextPage(event) {
-        event.stopPropagation();
-        if (this.props.page > this.getNbPages()) {
-            throw new Error('Cannot after last page');
-        }
-        this.props.setPage(this.props.page + 1);
+  gotoPage(event) {
+    event.stopPropagation();
+    const page = event.currentTarget.dataset.page;
+    if (page < 1 || page > this.getNbPages()) {
+      throw new Error(`Page number ${page} out of boundaries`);
     }
+    this.props.setPage(page);
+  }
 
-    gotoPage(event) {
-        event.stopPropagation();
-        const page = event.currentTarget.dataset.page;
-        if (page < 1 || page > this.getNbPages()) {
-            throw new Error(`Page number ${page} out of boundaries`);
-        }
-        this.props.setPage(page);
-    }
-
-    renderPageNums() {
-      return <div></div>;
-        // return this.range().map(pageNum =>
-        //     (pageNum === '.') ?
-        //         <span key={pageNum} style={{ padding: '1.2em' }}>&hellip;</span> :
-        //         <FlatButton key={pageNum} label={pageNum} data-page={pageNum} onClick={::this.gotoPage} primary={pageNum !== this.props.page} style={buttonStyle} />
-        // );
-    }
-
-    render() {
-        const { page, perPage, total } = this.props;
-        if (total === 0) return null;
-        const offsetEnd = Math.min(page * perPage, total);
-        const offsetBegin = Math.min((page - 1) * perPage + 1, offsetEnd);
-        const nbPages = this.getNbPages();
-
-        return (
-          <div className="row">
-          <Pagination>
-            <PaginationItem>
-              <PaginationLink previous onClick={(e) => e.preventDefault()} href="#" />
-            </PaginationItem>
-            <PaginationItem>
-          <PaginationLink href="#">
-            1
-          </PaginationLink>
+  renderPageNums() {
+    const { page: currentPageNum } = this.props;
+    return this.range().map(pageNum =>
+      (pageNum === '.') ?
+        <PaginationItem>
+          <PaginationLink tag='button'>&hellip;</PaginationLink>
         </PaginationItem>
-          </Pagination>
-          </div>
+        :
+        <PaginationItem active={pageNum === currentPageNum}>
+          <PaginationLink tag='button' onClick={this.gotoPage} data-page={pageNum}>{pageNum}</PaginationLink>
+        </PaginationItem>
+    );
+  }
 
-        );
-        // return (
-        //     <Toolbar>
-        //         <ToolbarGroup firstChild>
-        //             <span style={{ padding: '1.2em' }} >{offsetBegin}-{offsetEnd} of {total}</span>
-        //         </ToolbarGroup>
-        //         {nbPages > 1 &&
-        //             <ToolbarGroup>
-        //             {page > 1 &&
-        //                 <FlatButton primary key="prev" label="Prev" icon={<ChevronLeft />} onClick={::this.prevPage} style={buttonStyle} />
-        //             }
-        //             {this.renderPageNums()}
-        //             {page !== nbPages &&
-        //                 <FlatButton primary key="next" label="Next" icon={<ChevronRight />} labelPosition="before" onClick={::this.nextPage} style={buttonStyle} />
-        //             }
-        //             </ToolbarGroup>
-        //         }
-        //     </Toolbar>
-        // );
-    }
+  render() {
+    const { page, perPage, total } = this.props;
+    if (total === 0) return null;
+    const offsetEnd = Math.min(page * perPage, total);
+    const offsetBegin = Math.min((page - 1) * perPage + 1, offsetEnd);
+    const nbPages = this.getNbPages();
+
+    return (
+      <div className="clearfix">
+        <div className="pull-left">
+          <span>{offsetBegin}-{offsetEnd} of {total}</span>
+        </div>
+        <div className="pull-right">
+          {nbPages > 1 &&
+            <Pagination style={{ margin: 0 }}>
+              {page > 1 &&
+                <PaginationItem>
+                  <PaginationLink previous tag='button' onClick={this.prevPage} />
+                </PaginationItem>
+              }
+              {this.renderPageNums()}
+              {page !== nbPages &&
+                <PaginationItem>
+                  <PaginationLink next tag='button' onClick={this.nextPage} />
+                </PaginationItem>
+               }
+            </Pagination>
+          }
+        </div>
+      </div>
+    );
+  }
 }
 
 Paginator.propTypes = {

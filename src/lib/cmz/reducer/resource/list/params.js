@@ -6,7 +6,7 @@ const defaultState = {
     lang: null,
     order: SORT_DESC,
     page: 1,
-    perPage: 50,
+    perPage: 5,
     filter: {},
 };
 
