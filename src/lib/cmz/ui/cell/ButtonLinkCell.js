@@ -4,8 +4,7 @@ import { Button } from 'reactstrap';
 
 const ButtonLinkCell = ({ resource, basePath, source, record = {}, to, icon, children, ...passDownProps }) => (
   <Button tag={Link} to={to({ basePath, record })} {...passDownProps}>
-    {icon && <i className={icon} />}
-    {icon && ' '}
+    {icon && <span><i className={icon} />{' '}</span>}
     {children}
   </Button>
 );

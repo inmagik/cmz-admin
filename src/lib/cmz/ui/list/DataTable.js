@@ -3,13 +3,15 @@ import { Table } from 'reactstrap';
 
 const DataTable = ({ resource, basePath, columns, row, ids, data, currentSort, updateSort }) => {
   return (
-    <Table striped bordered>
+    <Table striped bordered responsive>
       <thead>
         <tr>
           {React.Children.toArray(columns).map((column, index) => (
             React.createElement(column.props.header, {
+              width: `calc(100%/${columns.length})`,
               key: column.props.source || column.props.label || index,
               label: column.props.label,
+              source: column.props.source,
               currentSort,
               updateSort,
               basePath,

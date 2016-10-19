@@ -6,6 +6,8 @@ export const SET_PAGE = 'SET_PAGE';
 
 export const SET_FILTER = 'SET_FILTER';
 
+export const SET_LANG = 'SET_LANG';
+
 const oppositeOrder = direction => (direction === SORT_DESC ? SORT_ASC : SORT_DESC);
 
 /**
@@ -13,6 +15,10 @@ const oppositeOrder = direction => (direction === SORT_DESC ? SORT_ASC : SORT_DE
  */
 export default (previousState, { type, payload }) => {
     switch (type) {
+
+    case SET_LANG:
+      return { ...previousState, page: 1, lang: payload };
+
     case SET_SORT:
         if (payload === previousState.sort) {
             return {

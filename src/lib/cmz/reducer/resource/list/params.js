@@ -3,7 +3,7 @@ import { CRUD_CHANGE_LIST_PARAMS } from '../../../actions/listActions';
 
 const defaultState = {
     sort: 'id',
-    lang: null,
+    lang: 'it',
     order: SORT_DESC,
     page: 1,
     perPage: 5,

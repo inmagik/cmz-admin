@@ -4,8 +4,7 @@ import { Link } from 'react-router';
 const MenuItem = ({ to, children, icon }) => (
   <Link className="menu-item" to={to}>
     <div>
-      {icon && (<i className={`${icon}`} /> )}
-      {icon && ' '}
+      {icon && <span><i className={icon} />{' '}</span>}
       {children}
     </div>
   </Link>
