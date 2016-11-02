@@ -1,4 +1,4 @@
-import { fork } from 'redux-saga/effects';
+import { fork, select } from 'redux-saga/effects';
 import crudFetch from './crudFetch';
 import authSaga from '../../auth/saga';
 import referenceFetch from './referenceFetch';
@@ -13,6 +13,6 @@ export default (restClient, config = {}, successSideEffects = defaultSuccessSide
     login: (credentials) => restClient(LOGIN, null, { credentials }),
     me: (token) => restClient(ME, null, { token }),
     refreshToken: (token) => restClient(REFRESH_TOKEN, null, { token }),
-    ...config,
+    ...(config.auth || {}),
   }));
 };

@@ -96,3 +96,24 @@ export default (resource) => (previousState = initialState, { type, payload, met
 };
 
 export const getRecord = (state, id) => state[id];
+
+// Mad stuff in a mad world...
+
+// Speed up shallow compare stuff...
+const emptyList = [];
+const emptyObject = {};
+
+// store -> view
+// export const mapMultilangRecord = (record = emptyObject, langs = emptyList) => ({
+//   ...record,
+//   langs: langs.map(({ code }) => (record.langs || emptyObject)[code] || emptyObject)
+// });
+//
+// // view -> store
+// export const normalizeMultilangRecord = (record = emptyObject, langs = emptyList) => ({
+//   ...record,
+//   langs: (record.langs || emptyList).reduce((result, langRecord, index) => ({
+//     ...result,
+//     [langs[index].code]: langRecord
+//   }), emptyObject)
+// });

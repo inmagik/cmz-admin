@@ -4,6 +4,7 @@ import { FieldArray } from 'redux-form';
 import { connect } from 'react-redux';
 import { Nav, NavItem, NavLink, TabContent, TabPane, Row, Col } from 'reactstrap';
 
+// TODO: Rename to multilang bro! And refactoring..........
 class LanguagesTabs extends Component {
   constructor(props) {
     super(props);
@@ -43,7 +44,7 @@ class LanguagesTabs extends Component {
                   {childrenFields && React.Children.map(childrenFields, child => {
                     return React.cloneElement(child, {
                       source: `${field}.${child.props.source}`,
-                      record: record.languages[index],
+                      record: record.langs[index],
                       resource,
                       basePath,
                     })
@@ -87,15 +88,16 @@ class LanguagesTabs extends Component {
 // };
 
 const LanguageFields = ({ langs, children, ...other }) => (
-  <FieldArray name="languages" childrenFields={children} component={LanguagesTabs} langs={langs} {...other} />
+  <FieldArray name="langs" childrenFields={children} component={LanguagesTabs} langs={langs} {...other} />
 );
 
 LanguageFields.propTypes = {
 };
 
-export default connect((state) => ({
-  langs: state.cmz.langs,
-}))(LanguageFields);
+export default LanguageFields;
+// export default connect((state) => ({
+//   langs: state.cmz.langs,
+// }))(LanguageFields);
 
 // import React, {PropTypes} from 'react';
 // import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';

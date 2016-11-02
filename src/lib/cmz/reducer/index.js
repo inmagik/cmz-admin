@@ -6,18 +6,25 @@ import loading from './loading';
 // import notification from './notification';
 // import references from './references';
 
-export default ({ resources, languages }) => {
+export default (config) => {
+  const { resources } = config;
   const resourceReducers = {};
   resources.forEach(resource => {
-    resourceReducers[resource.name] = resourceReducer(resource.name, resource.options);
+    resourceReducers[resource.name] = resourceReducer(resource.name, resource.options || {});
   });
   const auth = authReducer();
-  const langs = languagesReducer(languages);
+  const languages = languagesReducer(config.languages);
   return combineReducers({
     ...resourceReducers,
+    languages,
     auth,
-    langs,
     loading,
+    list: (state = null, { type, payload }) => {
+      if (type === 'SET_MY_LIST') {
+        return payload
+      }
+      return state
+    }
     // notification,
     // references,
   });

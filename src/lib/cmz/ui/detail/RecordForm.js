@@ -11,11 +11,19 @@ export const RecordForm = ({ handleSubmit, record, resource, basePath, children 
         basePath,
       })
     ))}
+    {/* FIXME: Disable the shitty button while loading */}
     <Button>Save</Button>
   </Form>
 );
 
 RecordForm.propTypes = {
+  children: PropTypes.node,
+  handleSubmit: PropTypes.func,
+  record: PropTypes.object,
+  resource: PropTypes.string,
+  basePath: PropTypes.string,
+  // multilang: PropTypes.bool.isRequired,
+  // langs: PropTypes.array,
 };
 
 export default reduxForm({

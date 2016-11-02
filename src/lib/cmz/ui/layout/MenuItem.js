@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import { Link } from 'react-router';
 
+// TODO: Implement selection or other similar stuff when match url...
 const MenuItem = ({ to, children, icon }) => (
   <Link className="menu-item" to={to}>
     <div>

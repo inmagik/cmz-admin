@@ -2,9 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Button } from 'reactstrap';
+// TODO: Better import...
+import { mapMultilangRecord, normalizeMultilangRecord, getRecord } from '../../reducer/resource/data';
 import PageContent from '../layout/PageContent';
 import Title from '../layout/Title';
 import { crudGetOne as crudGetOneAction, crudUpdate as crudUpdateAction } from '../../actions/dataActions';
+import { unloadEdit } from '../../actions/editActions';
 import RecordForm from './RecordForm';
 
 class Edit extends Component {
@@ -14,12 +17,12 @@ class Edit extends Component {
   }
 
   componentDidMount() {
-    this.props.crudGetOne(this.props.resource, this.props.id, this.getBasePath());
+    this.props.crudGetOne(this.props.resource, this.props.id, this.getBasePath(), this.getLangCodes());
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.id !== nextProps.id) {
-      this.props.crudGetOne(nextProps.resource, nextProps.id, this.getBasePath());
+      this.props.crudGetOne(nextProps.resource, nextProps.id, this.getBasePath(), this.getLangCodes());
     }
   }
 
@@ -28,13 +31,29 @@ class Edit extends Component {
     return location.pathname.split('/').slice(0, -1).join('/');
   }
 
+  getLangCodes() {
+    const { multilang, langs } = this.props;
+    if (multilang) {
+      return langs.map(({ code }) => code);
+    }
+    // No need langs
+    return undefined;
+  }
+
+  componentWillUnmount() {
+    this.props.unloadEdit();
+  }
+
   handleSubmit(record) {
-    this.props.crudUpdate(this.props.resource, this.props.id, record, this.getBasePath());
+    const { multilang, langs } = this.props;
+    const normalizedRecord = multilang ? normalizeMultilangRecord(record, langs) : record;
+    this.props.crudUpdate(this.props.resource, this.props.id, normalizedRecord, this.getBasePath(), this.getLangCodes());
   }
 
   render() {
-    const { title, children, id, data, isLoading, resource, hasDelete, validate } = this.props;
+    const { showForm, title, children, id, data, isLoading, resource, hasDelete, validate, langs, multilang } = this.props;
     const basePath = this.getBasePath();
+    // console.info(data)
 
     return (
       <PageContent title={<Title title={title} record={data} />} actions={(
@@ -42,7 +61,9 @@ class Edit extends Component {
           <Button tag={Link} to={basePath}><i className="fa fa-list" aria-hidden="true"></i></Button>
        </div>
       )}>
-        {data && data.languages && <RecordForm
+        {showForm && data && <RecordForm
+          langs={langs}
+          multilang={multilang}
           onSubmit={this.handleSubmit}
           record={data}
           resource={resource}
@@ -57,6 +78,10 @@ class Edit extends Component {
   }
 }
 
+Edit.defaultProps = {
+  multilang: false,
+};
+
 Edit.propTypes = {
   children: PropTypes.node,
   crudGetOne: PropTypes.func.isRequired,
@@ -69,17 +94,32 @@ Edit.propTypes = {
   params: PropTypes.object.isRequired,
   resource: PropTypes.string.isRequired,
   title: PropTypes.any,
+  showForm: PropTypes.bool.isRequired,
+  multilang: PropTypes.bool.isRequired,
+  langs: PropTypes.array,
 };
 
 function mapStateToProps(state, props) {
+  const sync = state.cmz[props.resource].edit.sync;
+  const langs = state.cmz.langs;
+  const resourceState = state.cmz[props.resource];
+
+  // When data arrived and multilang is enable map record for view
+  let data = getRecord(resourceState.data, props.params.id);
+  if (props.multilang && data) {
+    data = mapMultilangRecord(data, langs);
+  }
+
   return {
+    langs,
+    data,
+    showForm: sync, // Sync means we have last version of data retrieve id lookup
     id: props.params.id,
-    data: state.cmz[props.resource].data[props.params.id],
     isLoading: state.cmz.loading > 0,
   };
 }
 
 export default connect(
   mapStateToProps,
-  { crudGetOne: crudGetOneAction, crudUpdate: crudUpdateAction },
+  { crudGetOne: crudGetOneAction, crudUpdate: crudUpdateAction, unloadEdit },
 )(Edit);

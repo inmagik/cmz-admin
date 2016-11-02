@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Table } from 'reactstrap';
 
-const DataTable = ({ resource, basePath, columns, row, ids, data, currentSort, updateSort }) => {
+const DataTable = ({ resource, basePath, columns, row, ids, data, currentSort, updateSort, language }) => {
   return (
     <Table striped bordered responsive>
       <thead>
@@ -24,6 +24,7 @@ const DataTable = ({ resource, basePath, columns, row, ids, data, currentSort, u
         {ids.map(id => React.createElement(row, {
           key: id,
           record: data[id],
+          language,
           resource,
           basePath,
           columns
@@ -33,6 +34,7 @@ const DataTable = ({ resource, basePath, columns, row, ids, data, currentSort, u
   );
 };
 
+// TODO: Write propTypes....
 // DataTable.propTypes = {
 //   columns: propTypes.node,
 //   row: PropTypes.element,

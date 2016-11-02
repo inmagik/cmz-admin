@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { push as pushAction } from 'react-router-redux';
 import { debounce, omit } from 'lodash';
@@ -8,8 +9,8 @@ import PageContent from '../layout/PageContent';
 import DataTable from './DataTable';
 import DataRow from './DataRow';
 import Paginator from './Paginator';
-import LangSwitcher from './LangSwitcher';
-import queryReducer, { SET_SORT, SET_PAGE, SET_FILTER, SET_LANG } from '../../reducer/resource/list/queryReducer';
+import LanguageSwitcher from './LanguageSwitcher';
+import queryReducer, { SET_SORT, SET_PAGE, SET_FILTER, SET_LANGUAGE } from '../../reducer/resource/list/queryReducer';
 import { crudGetList as crudGetListAction } from '../../actions/dataActions';
 import { changeListParams as changeListParamsAction } from '../../actions/listActions';
 
@@ -29,6 +30,7 @@ export class List extends Component {
      || nextProps.query.sort !== this.props.query.sort
      || nextProps.query.order !== this.props.query.order
      || nextProps.query.page !== this.props.query.page
+     || nextProps.query.language !== this.props.query.language
      || nextProps.query.filter !== this.props.query.filter) {
         this.updateData(this.mapQuery((Object.keys(nextProps.query).length) > 0 ? nextProps.query : nextProps.params));
     }
@@ -59,16 +61,17 @@ export class List extends Component {
 
   // Map query both in url and in rest call...
   mapQuery(query) {
-    // Maybe even multilang and other options can be passed as args...
-    if (!this.props.multilang) {
-      return omit(query, ['lang']);
+    // FIXME: Maybe even translated and other options can be passed as args...
+    // Translated can change in nextProps... for example
+    if (!this.props.translated) {
+      return omit(query, ['language']);
     }
     return query;
   }
 
   updateData(query) {
-    const { sort, order, page, perPage, filter, lang } = query || this.getQuery();
-    this.props.crudGetList(this.props.resource, { page, perPage }, { field: sort, order }, filter, lang);
+    const { sort, order, page, perPage, filter, language } = query || this.getQuery();
+    this.props.crudGetList(this.props.resource, { page, perPage }, { field: sort, order }, filter, language);
   }
 
   updateSort = (event) => {
@@ -78,7 +81,7 @@ export class List extends Component {
 
   setPage = (page) => this.changeParams({ type: SET_PAGE, payload: page });
 
-  switchLang = (lang) => this.changeParams({ type: SET_LANG, payload: lang });
+  switchLanguage = (language) => this.changeParams({ type: SET_LANGUAGE, payload: language });
 
   setFilters = (filters) => {
     this.changeParams({ type: SET_FILTER, payload: filters });
@@ -98,7 +101,7 @@ export class List extends Component {
   }
 
   render() {
-    const { title, resource, ids, data, children, row, total, multilang } = this.props;
+    const { title, resource, ids, data, children, row, total, translated, languages, hasCreate } = this.props;
     const query = this.getQuery();
     const basePath = this.getBasePath();
 
@@ -106,25 +109,36 @@ export class List extends Component {
       <PageContent title={<Title title={title} />} actions={(
         <div>
           {/*
-            TODO Use sass or other shitty stuff to do a primary color custom for cmz
+            TODO: Use sass or other shitty stuff to do a primary color custom for cmz
             with deepskyblue
           */}
-          <ButtonDropdown color="secondary" isOpen={true} toggle={() => {}}>
+          {/* TODO: Implement filters
+            <ButtonDropdown color="secondary" isOpen={true} toggle={() => {}}>
             <DropdownToggle caret>Add Filter</DropdownToggle>
             <DropdownMenu>
               <DropdownItem>Titolo</DropdownItem>
             </DropdownMenu>
-          </ButtonDropdown>{' '}
-          <Button color="secondary"><i className="fa fa-plus" /> Create</Button>{' '}
+          </ButtonDropdown>{' '} */}
+          {hasCreate && (<span>
+            <Button tag={Link} to={`${basePath}/create`} color="secondary"><i className="fa fa-plus" /> Create</Button>
+            {' '}
+          </span>)}
           <Button color="secondary" onClick={this.refresh}><i className="fa fa-refresh" /> Refresh</Button>
         </div>
       )}>
         <Row style={{ paddingBottom: '0.5em' }}>
           <Col md={2}>
-            {multilang && <LangSwitcher currentLang={query.lang} onLangSwitched={this.switchLang} />}
+            {translated && (
+              <LanguageSwitcher
+                selectedLanguage={query.language}
+                onLanguageSwitched={this.switchLanguage}
+                languages={languages}
+              />
+            )}
           </Col>
         </Row>
         <DataTable
+          language={translated && query.language}
           resource={resource}
           basePath={basePath}
           columns={children}
@@ -148,15 +162,16 @@ export class List extends Component {
 
 List.propTypes = {
   title: PropTypes.any,
-  // To implement...
+  // TODO: Implement filters
   // filter: PropTypes.oneOfType([
   //     PropTypes.func,
   //     PropTypes.string,
   // ]),
   // filters: PropTypes.object,
   resource: PropTypes.string.isRequired,
-  // To implement...
-  // hasCreate: PropTypes.bool.isRequired,
+  translated: PropTypes.bool.isRequired,
+  languages: PropTypes.array,
+  hasCreate: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired,
   path: PropTypes.string,
   params: PropTypes.object.isRequired,
@@ -167,13 +182,13 @@ List.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   crudGetList: PropTypes.func.isRequired,
   changeListParams: PropTypes.func.isRequired,
-  // TODO: List of storie...
-  // children: PropTypes.element.isRequired,
+  children: PropTypes.node.isRequired,
   push: PropTypes.func.isRequired,
 };
 
 List.defaultProps = {
   row: DataRow,
+  hasCreate: true,
   filters: {},
 };
 
@@ -184,15 +199,26 @@ function mapStateToProps(state, props) {
     query.filter = JSON.parse(query.filter);
   }
 
-  return {
+  const mappedProps = {
     query,
     params: resourceState.list.params,
     ids: resourceState.list.ids,
     total: resourceState.list.total,
     data: resourceState.data,
     isLoading: state.cmz.loading > 0,
+    // TODO: Implement filters
     // filters: getFormValues('filterForm')(state) || resourceState.list.params.filter,
   };
+
+  // Add languages when needed
+  if (props.translated) {
+    return {
+      ...mappedProps,
+      languages: state.cmz.languages
+    };
+  }
+
+  return mappedProps;
 }
 
 export default connect(

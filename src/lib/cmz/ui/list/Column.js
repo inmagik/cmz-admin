@@ -1,7 +1,8 @@
-import React, { PropTypes } from 'react';
+import { PropTypes } from 'react';
 import ColumnHeader from './ColumnHeader';
 import TextCell from '../cell/TextCell';
 
+// This Component is used only for column configuration...
 const Column = (props) => null;
 
 Column.propTypes = {

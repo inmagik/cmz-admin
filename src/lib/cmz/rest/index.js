@@ -5,7 +5,7 @@ export {
   djangoRestClient,
 };
 
-export const makeRestClientFromStore = (store, restClientFactory) => restClientFactory({
+export const hookRestClientWithStore = (store, restClientFactory) => restClientFactory({
   getToken: () => store.getState().cmz.auth.token,
-  getLangs: () => store.getState().cmz.langs.map(lang => lang.code),
+  // getLangs: () => store.getState().cmz.langs.map(lang => lang.code),
 });
