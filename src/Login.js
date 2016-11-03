@@ -1,23 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 import { login as loginConnector } from './lib/auth/connectors';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'  ;
-
-const Name = ({ name, color }) => {
-    console.log('Render Render Render!');
-    return <div style={{ color }}>My Name Is {name.toLowerCase()}</div>;
-}
-Name.propTypes = {
-  color: PropTypes.string.isRequired,
-  name: PropTypes.string,
-};
-
-const Person = ({ person, children }) => (
-  <div>
-    Info of person
-    {React.cloneElement(children, { name: person.name })}
-  </div>
-);
-
+import {
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  FormText,
+  Card,
+  CardBlock,
+  // CardText,
+  // CardTitle,
+  Container,
+  Row,
+  Col,
+} from 'reactstrap';
 
 class Login extends Component {
   constructor(props) {
@@ -36,31 +33,40 @@ class Login extends Component {
 
   render() {
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <FormGroup>
-          <Label>Username</Label>
-          <Input
-            type="text"
-            placeholder="Username"
-            value={this.state.username}
-            onChange={e => this.setState({ username: e.target.value })}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Person person={{ name: 'Giova' }} >
-            <Name color="red" />
-          </Person>
-
-          <Label>Password</Label>
-          <Input
-            type="password"
-            placeholder="Password"
-            value={this.state.password}
-            onChange={e => this.setState({ password: e.target.value })}
-          />
-        </FormGroup>
-        <Button>Submit</Button>
-      </Form>
+      <Container>
+        <Row>
+          <Col sm={{ size: 6, offset: 3 }}>
+            <div style={{ textAlign: 'center', paddingBottom: '1em', paddingTop: '2em' }}>
+              <h1>CMZ ~ Login</h1>
+            </div>
+            <Card>
+              <CardBlock>
+                <Form onSubmit={this.handleSubmit}>
+                  <FormGroup>
+                    <Label>Username</Label>
+                    <Input
+                      type="text"
+                      placeholder="Username"
+                      value={this.state.username}
+                      onChange={e => this.setState({ username: e.target.value })}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Password</Label>
+                    <Input
+                      type="password"
+                      placeholder="Password"
+                      value={this.state.password}
+                      onChange={e => this.setState({ password: e.target.value })}
+                    />
+                  </FormGroup>
+                  <Button>Login</Button>
+                </Form>
+              </CardBlock>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }
