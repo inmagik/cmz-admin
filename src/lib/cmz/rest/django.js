@@ -134,6 +134,8 @@ export default (apiUrl) => ({ getToken }) => {
     switch (type) {
     case GET_LIST:
       return {
+        // Ok, this is not the best approach, i know i know...
+        language: params.language,
         data: json.results.map(x => x),
         total: parseInt(json.count, 10),
       };

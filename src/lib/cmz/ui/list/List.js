@@ -109,7 +109,7 @@ export class List extends Component {
   }
 
   render() {
-    const { title, resource, ids, data, children, row, total, translated, languages, hasCreate } = this.props;
+    const { title, resource, ids, data, children, row, total, translated, languages, hasCreate, currentLanguage } = this.props;
     const query = this.getQuery();
     const basePath = this.getBasePath();
 
@@ -146,7 +146,7 @@ export class List extends Component {
           </Col>
         </Row>
         <DataTable
-          language={translated && query.language}
+          language={translated && currentLanguage}
           resource={resource}
           basePath={basePath}
           columns={children}
@@ -186,6 +186,7 @@ List.propTypes = {
   query: PropTypes.object.isRequired,
   ids: PropTypes.array,
   total: PropTypes.number.isRequired,
+  currentLanguage: PropTypes.string,
   data: PropTypes.object,
   isLoading: PropTypes.bool.isRequired,
   crudGetList: PropTypes.func.isRequired,
@@ -213,6 +214,7 @@ function mapStateToProps(state, props) {
     params: resourceState.list.params,
     ids: resourceState.list.ids,
     total: resourceState.list.total,
+    currentLanguage: resourceState.list.language,
     data: resourceState.data,
     isLoading: state.cmz.loading > 0,
     languages: state.cmz.languages
