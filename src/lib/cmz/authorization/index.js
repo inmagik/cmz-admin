@@ -1,5 +1,5 @@
 import { UserAuthWrapper } from 'redux-auth-wrapper';
-import { routerReducer, syncHistoryWithStore, routerActions, routerMiddleware } from 'react-router-redux';
+import { routerActions } from 'react-router-redux';
 
 export const UserIsAuthenticated = UserAuthWrapper({
   authSelector: state => state.cmz.auth.user,

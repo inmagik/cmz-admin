@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 import { Field } from 'redux-form';
 

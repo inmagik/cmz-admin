@@ -1,13 +1,13 @@
 import {
-    CRUD_GET_LIST_SUCCESS,
-    CRUD_GET_ONE_SUCCESS,
-    CRUD_GET_MANY_SUCCESS,
-    CRUD_GET_MANY_REFERENCE_SUCCESS,
-    CRUD_UPDATE,
-    CRUD_UPDATE_SUCCESS,
-    CRUD_CREATE_SUCCESS,
-    CRUD_GET_MATCHING_SUCCESS,
-    SORTABLE_GET_LIST_SUCCESS,
+  CRUD_GET_LIST_SUCCESS,
+  CRUD_GET_ONE_SUCCESS,
+  CRUD_GET_MANY_SUCCESS,
+  CRUD_GET_MANY_REFERENCE_SUCCESS,
+  CRUD_UPDATE,
+  CRUD_UPDATE_SUCCESS,
+  CRUD_CREATE_SUCCESS,
+  CRUD_GET_MATCHING_SUCCESS,
+  SORTABLE_GET_LIST_SUCCESS,
 } from '../../actions/dataActions';
 
 /**
@@ -96,24 +96,3 @@ export default (resource) => (previousState = initialState, { type, payload, met
 };
 
 export const getRecord = (state, id) => state[id];
-
-// Mad stuff in a mad world...
-
-// Speed up shallow compare stuff...
-const emptyList = [];
-const emptyObject = {};
-
-// store -> view
-// export const mapMultilangRecord = (record = emptyObject, langs = emptyList) => ({
-//   ...record,
-//   langs: langs.map(({ code }) => (record.langs || emptyObject)[code] || emptyObject)
-// });
-//
-// // view -> store
-// export const normalizeMultilangRecord = (record = emptyObject, langs = emptyList) => ({
-//   ...record,
-//   langs: (record.langs || emptyList).reduce((result, langRecord, index) => ({
-//     ...result,
-//     [langs[index].code]: langRecord
-//   }), emptyObject)
-// });

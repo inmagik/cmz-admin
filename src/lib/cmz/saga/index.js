@@ -1,4 +1,4 @@
-import { fork, select } from 'redux-saga/effects';
+import { fork } from 'redux-saga/effects';
 import crudFetch from './crudFetch';
 import authSaga from '../../auth/saga';
 import referenceFetch from './referenceFetch';

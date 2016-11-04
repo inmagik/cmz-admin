@@ -28,20 +28,17 @@ class Create extends Component {
     // When create is translated enable the first lang as initial form values
     if (translated) {
       if (languages.length > 0) {
-        return {
-          translations: {
-            [languages[0].code]: {}
-          }
-        };
+        // Enable first translation
+        return { translations: { [languages[0].code]: {} }};
       }
-      return { translations: {} }
+      return { translations: {} };
     }
 
     return {};
   }
 
   render() {
-    const { title, children, isLoading, resource, validation, languages } = this.props;
+    const { title, children, resource, languages } = this.props;
     const basePath = this.getBasePath();
     const data = this.getFormData();
 

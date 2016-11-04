@@ -1,6 +1,6 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import classnames from 'classnames';
-import { FieldArray, formValueSelector, change } from 'redux-form';
+import { formValueSelector, change } from 'redux-form';
 import { connect } from 'react-redux';
 import { Button, Nav, NavItem, NavLink, TabContent, TabPane, Row, Col } from 'reactstrap';
 

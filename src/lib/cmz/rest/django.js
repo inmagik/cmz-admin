@@ -13,12 +13,9 @@ import {
   CUSTOM_DELETE,
   ME,
   REFRESH_TOKEN,
-  LOGIN,
-  UPDATE_SORT,
+  LOGIN
 } from './types';
 import { fetchJson, queryParameters } from '../util/fetch';
-import { compose } from 'lodash/fp';
-import { omit } from 'lodash';
 
 export default (apiUrl) => ({ getToken }) => {
 
@@ -132,7 +129,8 @@ export default (apiUrl) => ({ getToken }) => {
   };
 
   const convertHTTPResponseToREST = (response, type, resource, params) => {
-    const { headers, json } = response;
+    // Also has { headers } if needed tip for future NERDs...
+    const { json } = response;
     switch (type) {
     case GET_LIST:
       return {

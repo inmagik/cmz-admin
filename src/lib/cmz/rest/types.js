@@ -13,4 +13,3 @@ export const CUSTOM_DELETE = 'CUSTOM_DELETE';
 export const ME = 'ME';
 export const LOGIN = 'LOGIN';
 export const REFRESH_TOKEN = 'REFRESH_TOKEN';
-export const UPDATE_SORT = 'UPDATE_SORT';

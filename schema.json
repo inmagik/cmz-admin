@@ -1,0 +1,26 @@
+[
+  {
+    "api": {
+      "uri": "news",
+    },
+    "menu": {
+      "label": "News",
+      "icon": "fa-...."
+    },
+    "resourceSchema": {
+      "title": "News",
+      "properties": {
+        "title": {
+          "translated": true,
+        }
+      }
+    },
+    "ui": {
+      "list": {
+        "fields": ["title"],
+        "filters": ["title"]
+      }
+    }
+  }
+
+]

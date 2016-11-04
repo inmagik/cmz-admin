@@ -9,17 +9,6 @@ import {
   GET_MANY_REFERENCE
 } from '../rest/types';
 
-// export const SORTABLE_GET_LIST = 'SORTABLE_GET_LIST';
-// export const SORTABLE_GET_LIST_LOADING = 'SORTABLE_GET_LIST_LOADING';
-// export const SORTABLE_GET_LIST_FAILURE = 'SORTABLE_GET_LIST_FAILURE';
-// export const SORTABLE_GET_LIST_SUCCESS = 'SORTABLE_GET_LIST_SUCCESS';
-//
-// export const sortableGetList = (resource, lang) => ({
-//   type: SORTABLE_GET_LIST,
-//   payload: { lang },
-//   meta: { resource, fetch: GET_LIST, cancelPrevious: true },
-// });
-
 export const CRUD_GET_LIST = 'CRUD_GET_LIST';
 export const CRUD_GET_LIST_LOADING = 'CRUD_GET_LIST_LOADING';
 export const CRUD_GET_LIST_FAILURE = 'CRUD_GET_LIST_FAILURE';

@@ -3,7 +3,7 @@ import PageContent from './lib/cmz/ui/layout/PageContent';
 
 const Dashboard = () => (
   <PageContent>
-    <h1>Nevermind the bollocks Here's CMZ</h1>
+    <h1>CMZ Home</h1>
   </PageContent>
 );
 

@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 import { Link } from 'react-router';
 
 // TODO: Implement selection or other similar stuff when match url...

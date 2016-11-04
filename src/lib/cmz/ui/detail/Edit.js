@@ -40,9 +40,8 @@ class Edit extends Component {
   }
 
   render() {
-    const { title, children, id, isLoading, resource, hasDelete, validate, languages, data } = this.props;
+    const { title, children, resource, validate, languages, data } = this.props;
     const basePath = this.getBasePath();
-    console.log(data)
 
     return (
       <PageContent title={<Title title={title} record={data} />} actions={(
@@ -71,6 +70,7 @@ Edit.propTypes = {
   crudGetOne: PropTypes.func.isRequired,
   crudUpdate: PropTypes.func.isRequired,
   data: PropTypes.object,
+  // TODO: Implement delete...
   // hasDelete: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
   isLoading: PropTypes.bool.isRequired,

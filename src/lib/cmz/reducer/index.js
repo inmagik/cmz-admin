@@ -19,12 +19,6 @@ export default (config) => {
     languages,
     auth,
     loading,
-    list: (state = null, { type, payload }) => {
-      if (type === 'SET_MY_LIST') {
-        return payload
-      }
-      return state
-    }
     // notification,
     // references,
   });

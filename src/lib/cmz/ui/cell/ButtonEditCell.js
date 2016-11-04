@@ -1,6 +1,4 @@
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
-import { Button } from 'reactstrap';
 import ButtonLinkCell from './ButtonLinkCell';
 
 const ButtonEditCell = ({ children, ...passDownProps }) => (

@@ -1,10 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { Navbar, NavbarBrand, Nav, NavItem, NavLink, Card, CardTitle, CardSubtitle, CardBlock } from 'reactstrap';
-import { Container, Row, Col } from 'reactstrap';
+import {
+  Navbar,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+} from 'reactstrap';
 import { logout } from '../../../auth/actions';
-import Menu from './Menu';
 
 const Layout = ({ children, brand, menutItems, logout, isLoading, menu }) => (
   <div>
@@ -17,7 +21,7 @@ const Layout = ({ children, brand, menutItems, logout, isLoading, menu }) => (
       </Nav>}
       <Nav className="pull-xs-right" navbar>
         <NavItem>
-          <NavLink onClick={() => logout()} href="#">Logout</NavLink>
+          <NavLink onClick={() => logout()} tag={'div'} className="pointer">Logout</NavLink>
         </NavItem>
       </Nav>
     </Navbar>

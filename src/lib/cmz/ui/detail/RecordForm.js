@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import { Form, Button } from 'reactstrap';
 
 export const RecordForm = ({ handleSubmit, record, languages, resource, basePath, children }) => (

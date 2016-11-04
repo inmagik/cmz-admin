@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { login as loginConnector } from './lib/auth/connectors';
 import {
   Button,
@@ -6,7 +6,7 @@ import {
   FormGroup,
   Label,
   Input,
-  FormText,
+  // FormText,
   Card,
   CardBlock,
   // CardText,
