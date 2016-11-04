@@ -76,10 +76,12 @@ const auth = ({
   function *watchLogin() {
     const { payload } = yield take(LOGIN);
     const { credentials } = payload;
+    console.log(`Try to login...`);
     yield put({ type: LOGIN_LOADING });
     try {
       const token = yield call(login, credentials);
       const user = yield call(me, token);
+      console.info(`Login ok got token [${token}].`)
       yield call(storeToken, token);
       yield put({ type: LOGIN_SUCCESS, payload: { token, user }});
       yield emitEffects(loginEffetcs, { token, user });
@@ -106,16 +108,21 @@ const auth = ({
   function *authenticateWithStorageToken() {
     let token = yield call(getToken);
     if (token) {
+      console.info(`Got a token in local storage [${token}], refresh them.`);
       yield put({ type: AUTH_WITH_TOKEN_LOADING });
       try {
         // Refresh token from storage before me
         token = yield call(refreshToken, token);
+        yield call(storeToken, token);
+        console.info(`Token refreshed [${token}], get user info by token`);
         // Get the user data
         const user = yield call(me, token);
+        console.info(`Got the user info [${JSON.stringify(user)}] by refreshed token in local storage.`);
         // Authenticate user in state
         yield put({ type: AUTH_WITH_TOKEN_SUCCESS, payload: { token, user }});
         return token;
       } catch (error) {
+        console.error('Failed to authenticate with token in local storage.');
         yield put({ type: AUTH_WITH_TOKEN_FAILURE, error: error.message ? error.message : error });
         // The token was wrong...
         yield call(removeToken);
@@ -133,10 +140,13 @@ const auth = ({
       yield call(delay, refreshTokenTick);
       yield put({ type: REFRESH_TOKEN_LOADING });
       try {
+        console.info(`Time to refresh token [${token}].`);
         token = yield call(refreshToken, token);
         yield call(storeToken, token);
+        console.info(`Token refreshed [${token}].`);
         yield put({ type: REFRESH_TOKEN_SUCCESS, payload: { token }});
       } catch (error) {
+        console.error('Fail to refresh token.')
         yield put({ type: REFRESH_TOKEN_FAILURE, error: error.message ? error.message : error });
         if (error.status === 401 || error.status === 403) {
           yield put(logout())
