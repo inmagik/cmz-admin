@@ -188,6 +188,7 @@ List.propTypes = {
 
 List.defaultProps = {
   row: DataRow,
+  translated: false,
   hasCreate: true,
   filters: {},
 };
@@ -199,26 +200,17 @@ function mapStateToProps(state, props) {
     query.filter = JSON.parse(query.filter);
   }
 
-  const mappedProps = {
+  return {
     query,
     params: resourceState.list.params,
     ids: resourceState.list.ids,
     total: resourceState.list.total,
     data: resourceState.data,
     isLoading: state.cmz.loading > 0,
+    languages: state.cmz.languages
     // TODO: Implement filters
     // filters: getFormValues('filterForm')(state) || resourceState.list.params.filter,
   };
-
-  // Add languages when needed
-  if (props.translated) {
-    return {
-      ...mappedProps,
-      languages: state.cmz.languages
-    };
-  }
-
-  return mappedProps;
 }
 
 export default connect(

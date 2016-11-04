@@ -1,8 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import classnames from 'classnames';
-import { FieldArray, formValueSelector } from 'redux-form';
+import { FieldArray, formValueSelector, change } from 'redux-form';
 import { connect } from 'react-redux';
-import { Nav, NavItem, NavLink, TabContent, TabPane, Row, Col } from 'reactstrap';
+import { Button, Nav, NavItem, NavLink, TabContent, TabPane, Row, Col } from 'reactstrap';
 
 class TranslatedFields extends Component {
   constructor(props) {
@@ -21,17 +21,39 @@ class TranslatedFields extends Component {
     }
   }
 
+  // Check if given translations is enabled by his code
+  isTranslationEnabled(code) {
+    const { translations } = this.props;
+    return !(typeof translations[code] === 'undefined' || translations[code] === null);
+  }
+
   render() {
-    const { children, languages, record, resource, basePath, translations } = this.props;
+    const { children, languages, record, resource, basePath } = this.props;
     const { activeTab } = this.state;
-    console.log(translations)
     return (
       <div>
         <Nav tabs>
           {languages.map(({ code, name }) => (
             <NavItem key={code}>
               <NavLink className={classnames({ active: activeTab === code })} onClick={() => this.toggle(code)}>
-                {name}
+                {this.isTranslationEnabled(code) && (
+                  <Button type="button" color="primary" size="sm"
+                    onClick={() => this.props.disableTranslation(code)}>
+                    <i className="fa fa-times-circle" aria-hidden="true"></i>
+                  </Button>
+                )}
+                {!this.isTranslationEnabled(code) && (
+                  <Button type="button" color="primary" size="sm"
+                    onClick={() => this.props.enableTranslation(code)}>
+                    <i className="fa fa-check-circle " aria-hidden="true"></i>
+                  </Button>
+                )}
+                {' '}
+                <span style={{
+                  fontWeight: 'strong',
+                  fontSize: '1.3em',
+                  textDecoration: this.isTranslationEnabled(code) ? 'none' : 'line-through'
+                }}>{name}</span>
               </NavLink>
             </NavItem>
           ))}
@@ -41,22 +63,16 @@ class TranslatedFields extends Component {
             <TabPane tabId={code} key={code}>
               <Row>
                 <Col sm="12" style={{ padding: '1.5em' }}>
-                  {translations[code] && (
-                    <div>
-                      <button>Disable!</button>
-                      {children && React.Children.map(children, child => (
-                        React.cloneElement(child, {
-                          source: `translations.${code}.${child.props.source}`,
-                          record,
-                          resource,
-                          basePath,
-                        })
-                      ))}
-                    </div>
-                  )}
-                  {!translations[code] && (
-                    <button>Enable!</button>
-                  )}
+                  <div style={this.isTranslationEnabled(code) ? {} : { pointerEvents: 'none', opacity: '0.5' }}>
+                    {children && React.Children.map(children, child => (
+                      React.cloneElement(child, {
+                        source: `translations.${code}.${child.props.source}`,
+                        record,
+                        resource,
+                        basePath,
+                      })
+                    ))}
+                  </div>
                 </Col>
               </Row>
             </TabPane>
@@ -67,13 +83,13 @@ class TranslatedFields extends Component {
   }
 }
 
+// TODO: In a better universe this component no need to map connect with redux
+// instead the required actions may be pass down from RecordForm component directly...
 const selector = formValueSelector('record-form');
 
-// function map
-
 export default connect(state => ({
-  languages: state.cmz.languages,
   translations: selector(state, 'translations')
 }), {
-
+  disableTranslation: (code) => change('record-form', `translations.${code}`, null),
+  enableTranslation: (code) => change('record-form', `translations.${code}`, {})
 })(TranslatedFields);

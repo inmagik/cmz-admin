@@ -2,17 +2,18 @@ import React, {PropTypes} from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Form, Button } from 'reactstrap';
 
-export const RecordForm = ({ handleSubmit, record, resource, basePath, children }) => (
+export const RecordForm = ({ handleSubmit, record, languages, resource, basePath, children }) => (
   <Form onSubmit={handleSubmit}>
     {children && React.Children.map(children, child => (
       React.cloneElement(child, {
         record,
+        languages,
         resource,
         basePath,
       })
     ))}
     {/* FIXME: Disable the shitty button while loading */}
-    <Button>Save</Button>
+    <Button color="success">Save</Button>
   </Form>
 );
 
@@ -22,8 +23,6 @@ RecordForm.propTypes = {
   record: PropTypes.object,
   resource: PropTypes.string,
   basePath: PropTypes.string,
-  // multilang: PropTypes.bool.isRequired,
-  // langs: PropTypes.array,
 };
 
 export default reduxForm({
