@@ -36,9 +36,9 @@ export const CRUD_GET_ONE_LOADING = 'CRUD_GET_ONE_LOADING';
 export const CRUD_GET_ONE_FAILURE = 'CRUD_GET_ONE_FAILURE';
 export const CRUD_GET_ONE_SUCCESS = 'CRUD_GET_ONE_SUCCESS';
 
-export const crudGetOne = (resource, id, basePath, langs, cancelPrevious = true) => ({
+export const crudGetOne = (resource, id, basePath, cancelPrevious = true) => ({
   type: CRUD_GET_ONE,
-  payload: { id, basePath, langs },
+  payload: { id, basePath },
   meta: { resource, fetch: GET_ONE, cancelPrevious },
 });
 
@@ -58,9 +58,9 @@ export const CRUD_UPDATE_LOADING = 'CRUD_UPDATE_LOADING';
 export const CRUD_UPDATE_FAILURE = 'CRUD_UPDATE_FAILURE';
 export const CRUD_UPDATE_SUCCESS = 'CRUD_UPDATE_SUCCESS';
 
-export const crudUpdate = (resource, id, data, basePath, langs) => ({
+export const crudUpdate = (resource, id, data, basePath) => ({
   type: CRUD_UPDATE,
-  payload: { id, data, basePath, langs },
+  payload: { id, data, basePath },
   meta: { resource, fetch: UPDATE, cancelPrevious: true },
 });
 

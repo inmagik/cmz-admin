@@ -2,7 +2,7 @@ import React from 'react';
 import List from './lib/cmz/ui/list/List';
 import Edit from './lib/cmz/ui/detail/Edit';
 import Column from './lib/cmz/ui/list/Column';
-import EditButtonCell from './lib/cmz/ui/cell/EditButtonCell';
+// import EditButtonCell from './lib/cmz/ui/cell/EditButtonCell';
 import { Link } from 'react-router';
 
 export const PortfolioList = (props) => (
@@ -13,7 +13,7 @@ export const PortfolioList = (props) => (
   >
     <Column label="Titolo" source="title" />
     <Column label="Body" source="body" />
-    <Column cell={EditButtonCell} />
+    {/* <Column cell={EditButtonCell} /> */}
   </List>
 );
 

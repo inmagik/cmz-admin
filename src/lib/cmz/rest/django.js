@@ -131,21 +131,6 @@ export default (apiUrl) => ({ getToken }) => {
     return { url, options };
   };
 
-  // Normalize a record in lang add the langs key
-  // with the form {..., langs: { it: {...}, en: {...}, ... }}
-  // const normailizeJsonWithLangs = (json, lang) => {
-  //   if (lang) {
-  //     const mapper = compose(
-  //       // Become { lang: { it: {...} } }
-  //       (record) => ({ ...record, langs: { [lang]: record } }),
-  //       // This django field make confusion when merging data...
-  //       (record) => omit(record, ['language_code'])
-  //     );
-  //     return Array.isArray(json) ? json.map(mapper) : mapper(json);
-  //   }
-  //   return json;
-  // };
-
   const convertHTTPResponseToREST = (response, type, resource, params) => {
     const { headers, json } = response;
     switch (type) {
@@ -169,63 +154,4 @@ export default (apiUrl) => ({ getToken }) => {
     return fetchJson(url, options)
       .then(response => convertHTTPResponseToREST(response, type, resource, params));
   };
-
-  // Take base record and lang records and make one record with all langs
-  // const joinIntoOneLangRecord = (record, langRecords) => ({
-  //   ...record,
-  //   langs: langRecords.reduce((langs, langRecord) => ({
-  //     ...langs,
-  //     ...langRecord.langs
-  //   }), {})
-  // });
-
-  // return (type, resource, params) => {
-  //   // Perform a multilangs GET_ONE with N rest calls...
-  //   if (type === GET_ONE && Array.isArray(params.langs)) {
-  //     const restLangs = () => Promise.all(params.langs.map(lang =>
-  //       rest(type, resource, { ...params, lang })
-  //         .then(
-  //           r => r, // Ok nothing to do
-  //           error => {
-  //             // Lang not alredy configured...
-  //             if (error.status === 404) {
-  //               return { langs: { [lang]: {} } };
-  //             }
-  //             // Other errors stop all promise
-  //             return Promise.reject(error);
-  //           }
-  //         )
-  //     ));
-  //
-  //     return rest(type, resource, params).then(record => restLangs().then(jsons =>
-  //       joinIntoOneLangRecord(omit(record, ['language_code']), jsons)
-  //     ));
-  //   }
-  //   // Perform a multilang UPDATE with N rest calls...
-  //   if (type === UPDATE && Array.isArray(params.langs)) {
-  //     const restLangs = () => Promise.all(params.langs.map(lang =>
-  //       rest(type, resource, { ...params, data: { ...params.data.langs[lang], language_code: lang }})
-  //     ));
-  //
-  //     return rest(type, resource, { ...params, data: omit(params.data, ['langs']) })
-  //       .then(record => restLangs().then(jsons =>
-  //         joinIntoOneLangRecord(omit(record, ['language_code']), jsons)
-  //       ));
-  //   }
-  //   // Perform a multilang CREATE with N rest calls...
-  //   if (type === CREATE && Array.isArray(params.langs)) {
-  //     const restLangs = (id) => Promise.all(params.langs.map(lang =>
-  //       rest(UPDATE, resource, { ...params, id, data: { ...params.data.langs[lang], language_code: lang }})
-  //       // .then({
-  //       //
-  //       // })
-  //     ));
-  //
-  //     return rest(type, resource, { ...params, data: omit(params.data, ['langs']) })
-  //       .then(record => restLangs(record.id).then(jsons =>
-  //         joinIntoOneLangRecord(omit(record, ['language_code']), jsons)
-  //       ));
-  //   }
-  //   return rest(type, resource, params);
-  // };
 };

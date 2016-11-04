@@ -2,13 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Button } from 'reactstrap';
-// TODO: Better import...
-import { mapMultilangRecord, normalizeMultilangRecord, getRecord } from '../../reducer/resource/data';
+import { getRecord } from '../../reducer/resource/data';
 import PageContent from '../layout/PageContent';
 import Title from '../layout/Title';
 import { crudGetOne as crudGetOneAction, crudUpdate as crudUpdateAction } from '../../actions/dataActions';
 import { unloadEdit } from '../../actions/editActions';
 import RecordForm from './RecordForm';
+import { omitEmptyTranslationsAsNeeded } from '../../util/translations';
 
 class Edit extends Component {
   constructor(props) {
@@ -17,12 +17,12 @@ class Edit extends Component {
   }
 
   componentDidMount() {
-    this.props.crudGetOne(this.props.resource, this.props.id, this.getBasePath(), this.getLangCodes());
+    this.props.crudGetOne(this.props.resource, this.props.id, this.getBasePath());
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.id !== nextProps.id) {
-      this.props.crudGetOne(nextProps.resource, nextProps.id, this.getBasePath(), this.getLangCodes());
+      this.props.crudGetOne(nextProps.resource, nextProps.id, this.getBasePath());
     }
   }
 
@@ -31,29 +31,18 @@ class Edit extends Component {
     return location.pathname.split('/').slice(0, -1).join('/');
   }
 
-  getLangCodes() {
-    const { multilang, langs } = this.props;
-    if (multilang) {
-      return langs.map(({ code }) => code);
-    }
-    // No need langs
-    return undefined;
-  }
-
   componentWillUnmount() {
     this.props.unloadEdit();
   }
 
   handleSubmit(record) {
-    const { multilang, langs } = this.props;
-    const normalizedRecord = multilang ? normalizeMultilangRecord(record, langs) : record;
-    this.props.crudUpdate(this.props.resource, this.props.id, normalizedRecord, this.getBasePath(), this.getLangCodes());
+    this.props.crudUpdate(this.props.resource, this.props.id, omitEmptyTranslationsAsNeeded(record), this.getBasePath());
   }
 
   render() {
-    const { showForm, title, children, id, data, isLoading, resource, hasDelete, validate, langs, multilang } = this.props;
+    const { title, children, id, isLoading, resource, hasDelete, validate, languages, data } = this.props;
     const basePath = this.getBasePath();
-    // console.info(data)
+    console.log(data)
 
     return (
       <PageContent title={<Title title={title} record={data} />} actions={(
@@ -61,14 +50,13 @@ class Edit extends Component {
           <Button tag={Link} to={basePath}><i className="fa fa-list" aria-hidden="true"></i></Button>
        </div>
       )}>
-        {showForm && data && <RecordForm
-          langs={langs}
-          multilang={multilang}
+        {data && <RecordForm
+          languages={languages}
           onSubmit={this.handleSubmit}
           record={data}
+          initialValues={data}
           resource={resource}
           basePath={basePath}
-          initialValues={data}
           validate={validate}
         >
           {children}
@@ -77,10 +65,6 @@ class Edit extends Component {
     );
   }
 }
-
-Edit.defaultProps = {
-  multilang: false,
-};
 
 Edit.propTypes = {
   children: PropTypes.node,
@@ -94,28 +78,26 @@ Edit.propTypes = {
   params: PropTypes.object.isRequired,
   resource: PropTypes.string.isRequired,
   title: PropTypes.any,
-  showForm: PropTypes.bool.isRequired,
-  multilang: PropTypes.bool.isRequired,
-  langs: PropTypes.array,
+  translated: PropTypes.bool.isRequired,
+  languages: PropTypes.array,
+};
+
+Edit.defaultProps = {
+  translated: false,
 };
 
 function mapStateToProps(state, props) {
   const sync = state.cmz[props.resource].edit.sync;
-  const langs = state.cmz.langs;
   const resourceState = state.cmz[props.resource];
 
-  // When data arrived and multilang is enable map record for view
-  let data = getRecord(resourceState.data, props.params.id);
-  if (props.multilang && data) {
-    data = mapMultilangRecord(data, langs);
-  }
+  // Data is valid only when is synched!
+  const data = sync ? getRecord(resourceState.data, props.params.id) : null;
 
   return {
-    langs,
     data,
-    showForm: sync, // Sync means we have last version of data retrieve id lookup
     id: props.params.id,
-    isLoading: state.cmz.loading > 0,
+    languages: state.cmz.languages,
+    isLoading: state.cmz.loading > 0
   };
 }
 
