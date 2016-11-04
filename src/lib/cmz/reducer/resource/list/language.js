@@ -5,7 +5,7 @@ export default (resource) => (previousState = null, { type, payload, meta }) => 
       return previousState;
   }
   if (type === CRUD_GET_LIST_SUCCESS) {
-      return payload.language;
+      return typeof payload.language === 'undefined' ? null : payload.language;
   }
   return previousState;
 };
