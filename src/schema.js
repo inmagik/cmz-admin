@@ -1,8 +1,8 @@
-[
+const schema = [
   {
     "resource": "news",
     "api": {
-      "uri": "news",
+      "uri": "portfolioitem",
     },
     "menu": {
       "label": "News",
@@ -12,6 +12,9 @@
       "title": "News",
       "properties": {
         "title": {
+          "translated": true,
+        },
+        "author": {
           "translated": true,
         }
       }
@@ -31,20 +34,6 @@
       }
     }
   }
+];
 
-]
-
-"properties": {
-  "lat": {
-    "type": "number",
-          "propertyOrder": 1
-      },
-      "lon": {
-    "type": "number",
-          "propertyOrder": 2
-      },
-      "wrapper_class": {
-    "type": "string",
-          "propertyOrder": 3
-      }
-},
+export default schema;

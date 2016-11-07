@@ -1,0 +1,1 @@
+export const SCHEMA_RETRIEVED = 'alien@SCHEMA_RETRIEVED';

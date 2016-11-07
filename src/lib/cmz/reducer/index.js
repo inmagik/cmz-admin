@@ -6,7 +6,7 @@ import loading from './loading';
 // import notification from './notification';
 // import references from './references';
 
-export default (config) => {
+export default (config, asyncReducers) => {
   const { resources } = config;
   const resourceReducers = {};
   resources.forEach(resource => {
@@ -19,6 +19,7 @@ export default (config) => {
     languages,
     auth,
     loading,
+    ...asyncReducers
     // notification,
     // references,
   });

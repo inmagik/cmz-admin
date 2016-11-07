@@ -5,7 +5,53 @@ import Column from './lib/cmz/ui/list/Column';
 import { ButtonEditCell, ImageCell, BoolCell, LongTextCell } from './lib/cmz/ui/cell';
 import { TextField } from './lib/cmz/ui/field';
 
-export const PortfolioList = (props) => (
+import listReplicator from './lib/cmz/alien/replicator/list';
+// console.log(listReplicator())
+
+export const PortfolioList = listReplicator({
+    "api": {
+      "uri": "portfolioitem",
+    },
+    "menu": {
+      "label": "News",
+      "icon": "fa-...."
+    },
+    "resourceSchema": {
+      "title": "News",
+      "properties": {
+        "author": {
+          "column": {
+            "hide": true,
+            "cell": "longText"
+          },
+          "translated": true,
+        },
+        "title": {
+          "column": {
+            "hide": true,
+            "cell": "longText"
+          },
+          "translated": true,
+        }
+      }
+    },
+    "ui": {
+      "list": {
+        "columns": [
+          {
+            "source": "title",
+            "type": "text",
+            "label": "Title",
+            "translated": true
+          },
+
+        ],
+        "filters": ["title"]
+      }
+    }
+});
+
+export const PortfolioList2 = (props) => (
   <List
     {...props}
     hasCreate={false}
