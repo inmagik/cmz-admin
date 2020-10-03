@@ -10,9 +10,12 @@ Column.propTypes = {
   label: PropTypes.string,
   header: PropTypes.any.isRequired,
   cell: PropTypes.any.isRequired,
+  cellProps: PropTypes.object.isRequired,
+  width: PropTypes.string,
 };
 
 Column.defaultProps = {
+  cellProps: {},
   header: ColumnHeader,
   cell: TextCell,
 };

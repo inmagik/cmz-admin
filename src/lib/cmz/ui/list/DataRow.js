@@ -9,6 +9,7 @@ const DataRow = ({ resource, record, columns, basePath, language }) => (
           source={(language && column.props.translated) ? `translations.${language}.${column.props.source}` : column.props.source}
           record={record}
           resource={resource}
+          {...column.props.cellProps}
         />
       </td>
     ))}

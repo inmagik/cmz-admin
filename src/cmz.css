@@ -83,3 +83,12 @@ body {
 .page-link:focus, .page-link:hover {
   color: deepskyblue;
 }
+
+.data-table {
+  table-layout: fixed;
+}
+
+.data-table td {
+  word-break: break-all;
+  text-overflow: ellipsis;
+}
